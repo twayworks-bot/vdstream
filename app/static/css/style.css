@@ -1,0 +1,53 @@
+body {
+    background-color: #0f172a;
+    color: #f1f5f9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.stat-card {
+    background: #1e293b;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.card {
+    background: #1e293b;
+    border-radius: 12px;
+}
+
+.upload-dropzone {
+    background: #0f172a;
+    border: 2px dashed #475569 !important;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.upload-dropzone:hover, .upload-dropzone.drag-over {
+    border-color: #3b82f6 !important;
+    background: #1e293b;
+}
+
+.table {
+    --bs-table-bg: #1e293b;
+    --bs-table-hover-bg: #334155;
+    color: #e2e8f0;
+}
+
+.badge {
+    font-weight: 500;
+}

@@ -1,0 +1,206 @@
+# ==============================================================================
+# VDSTREAM .dockerignore
+# 개인정보, 민감 데이터, 캐시, 로컬 바이너리 및 불필요한 빌드 아티팩트 제외
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Environments & Secrets (환경변수, 비밀 키, 인증 토큰, 개인정보)
+# ------------------------------------------------------------------------------
+.env
+*.env
+*.env.*
+.env*.local
+*.local.env
+syncgithub.env
+syncgithub.py
+
+# 인증서, 비대칭키, 보안 토큰, 클라이언트 시크릿
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.p12
+*.pfx
+*.pub
+id_rsa*
+id_ed25519*
+id_ecdsa*
+known_hosts
+credentials.json
+client_secret*.json
+service_account*.json
+*token*
+*.token
+token.txt
+tokens.json
+secret*
+*.secret
+secrets.json
+.netrc
+.npmrc
+.pypirc
+
+# 앱 코드 예외 보존 (token/secret 단어가 포함된 서비스/템플릿)
+!app/services/token_service.py
+!app/templates/tokens.html
+!app/templates/secrets.html
+
+# 쉘 및 개인 히스토리
+.*_history
+.bash_history
+.zsh_history
+.python_history
+.node_repl_history
+.history/
+history.md
+
+# ------------------------------------------------------------------------------
+# 2. Persistent Storage, User Media & Databases (사용자 미디어, HLS 청크, DB)
+# ------------------------------------------------------------------------------
+storage/
+downloads/
+app/data/
+data/
+
+# 동영상 및 오디오 미디어 파일 (호스트 로컬 테스트 및 업로드 파일)
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.m4v
+*.ts
+*.m3u8
+*.mp3
+*.aac
+*.wav
+*.flac
+*.m4a
+
+# SQLite 데이터베이스 및 저널/WAL 파일
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite-journal
+*.sqlite3-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# ------------------------------------------------------------------------------
+# 3. Host Binaries & Executables (윈도우 호스트 바이너리 제외 - 컨테이너 내부 apt 설치)
+# ------------------------------------------------------------------------------
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+old/
+OLD/
+
+# ------------------------------------------------------------------------------
+# 4. Python Bytecode, Caches & Virtual Environments (캐시 및 가상환경)
+# ------------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+.venv
+venv/
+env/
+ENV/
+build/
+dist/
+develop-eggs/
+eggs/
+.eggs/
+*.egg-info/
+wheels/
+share/python-wheels/
+
+# ------------------------------------------------------------------------------
+# 5. Tests, Tool & Linter Caches (테스트 코드, 커버리지, 린터 캐시)
+# ------------------------------------------------------------------------------
+tests/
+pytest.ini
+.pytest_cache/
+.cache/
+.hypothesis/
+.coverage
+.coverage.*
+coverage.xml
+nosetests.xml
+htmlcov/
+cover/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+
+# ------------------------------------------------------------------------------
+# 6. Documentation & Notes (도커 런타임 이미지에 불필요한 문서 및 기획 노트)
+# ------------------------------------------------------------------------------
+notes/
+docs/
+*.md
+
+# ------------------------------------------------------------------------------
+# 7. Git & Docker Meta Files (버전 관리 및 빌드 설정 파일)
+# ------------------------------------------------------------------------------
+.git/
+.git
+.gitignore
+.gitattributes
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+
+# ------------------------------------------------------------------------------
+# 8. IDE, Editor & OS Artifacts (IDE 설정 및 OS 메타데이터)
+# ------------------------------------------------------------------------------
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+
+# ------------------------------------------------------------------------------
+# 9. Temporary Files, Logs & Scratch (로그 및 임시 스크래치 파일)
+# ------------------------------------------------------------------------------
+*.log
+logs/
+scratch/
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+*.swp
+*.swo

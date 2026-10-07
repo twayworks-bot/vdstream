@@ -1,0 +1,242 @@
+# ==============================================================================
+# Byte-compiled / optimized / DLL files (Python 캐시 및 바이트코드)
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# ==============================================================================
+# Persistent Storage & User Media (VDSTREAM 사용자 업로드/트랜스코딩/스트리밍/다운로드 데이터)
+# ==============================================================================
+storage/
+downloads/
+app/data/
+data/
+
+# 미디어 파일 (업로드 영상, 변환된 영상, HLS 세그먼트 및 재생목록, 오디오 파일)
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.m4v
+*.ts
+*.m3u8
+*.mp3
+*.aac
+*.wav
+*.flac
+*.m4a
+
+# 데이터베이스 파일 및 저널/WAL 캐시
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite-journal
+*.sqlite3-journal
+*.sqlite-wal
+*.sqlite-shm
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# ==============================================================================
+# Environments and Secrets (환경설정, 개인정보, 시크릿 키)
+# ==============================================================================
+.env
+*.env
+*.env.*
+.env*.local
+*.local.env
+.venv
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# 공개 가능한 환경변수 템플릿 파일 예외 보존
+!*.env.example
+!app.env.example
+
+# ==============================================================================
+# Security Credentials, Private Keys, and Tokens (인증서, 비밀키, 토큰, 자격증명)
+# ==============================================================================
+*token*
+*.token
+token.txt
+tokens.json
+secret*
+*.secret
+secrets.json
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.p12
+*.pfx
+*.pub
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+id_ecdsa*
+known_hosts
+credentials.json
+client_secret*.json
+service_account*.json
+.netrc
+.npmrc
+.pypirc
+
+# 프로젝트 소스코드/템플릿 중 파일명에 token/secret이 포함된 파일 예외 보존
+!app/services/token_service.py
+!app/templates/tokens.html
+!app/templates/secrets.html
+
+# ==============================================================================
+# GitHub Sync Script & Private Configurations (배포/동기화 민감 스크립트)
+# ==============================================================================
+syncgithub.env
+syncgithub.py
+
+# ==============================================================================
+# Host Binaries & Executables (로컬 바이너리 및 실행 파일)
+# ==============================================================================
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+old/
+OLD/
+
+# ==============================================================================
+# Unit test / coverage reports & Tool Caches (테스트 결과, 커버리지, 캐시)
+# ==============================================================================
+.pytest_cache/
+.cache/
+.hypothesis/
+.coverage
+.coverage.*
+coverage.xml
+nosetests.xml
+htmlcov/
+cover/
+*.cover
+*.py,cover
+.tox/
+.nox/
+
+# Linters, Type Checkers & Tool Caches
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+.spyderproject
+.spyproject
+.ropeproject
+.webassets-cache
+/site
+
+# ==============================================================================
+# Distribution / packaging (빌드 및 패키징 아티팩트)
+# ==============================================================================
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ==============================================================================
+# Temporary Files, Logs, and Shell History (임시 파일, 로그, 쉘 히스토리)
+# ==============================================================================
+*.log
+logs/
+scratch/
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+*.swp
+*.swo
+
+# 히스토리 및 쉘 기록 (민감 명령어 및 개인정보 방지)
+.bash_history
+.zsh_history
+.python_history
+.node_repl_history
+history.md
+.history
+.history/
+
+# 프로젝트 문서 히스토리는 예외 보존
+!notes/history.md
+
+# ==============================================================================
+# IDE and Project Settings (에디터 및 IDE 설정)
+# ==============================================================================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sublime-project
+*.sublime-workspace
+
+# ==============================================================================
+# OS Files & System Metadata (OS 캐시 및 메타데이터)
+# ==============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+
+# ==============================================================================
+# Jupyter Notebook & Other Frameworks
+# ==============================================================================
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+instance/
+.scrapy
+docs/_build/
+*.mo
+*.pot
