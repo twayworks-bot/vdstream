@@ -128,6 +128,7 @@ async def get_video_status(video_id: str, db: Session = Depends(get_db)):
 
     if video.status == VideoStatus.COMPLETED:
         resp_data["stream_info_url"] = f"{settings.base_prefix}/api/v1/videos/{video.id}/stream"
+        resp_data["preview_url"] = f"{settings.base_prefix}/api/v1/streams/{video.id}/preview"
 
     return {
         "status": "success",
@@ -174,6 +175,7 @@ async def get_streaming_info(video_id: str, db: Session = Depends(get_db)):
             "session_id": session.session_id,
             "session_expires_in_seconds": settings.STREAM_SESSION_TIMEOUT_SECONDS,
             "streaming_urls": {
+                "preview_url": f"{settings.base_prefix}/api/v1/streams/{video.id}/preview",
                 "hls_master_url": f"{settings.base_prefix}/api/v1/streams/{video.id}/master.m3u8?session_id={session.session_id}",
                 "mp4_range_url": f"{settings.base_prefix}/api/v1/streams/{video.id}/mp4?session_id={session.session_id}"
             },

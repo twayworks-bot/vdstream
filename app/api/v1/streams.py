@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 from pathlib import Path
 from typing import Optional
 
@@ -10,16 +11,30 @@ from app.services.stream_manager import stream_manager
 from app.database import SessionLocal
 from app.models.video import Video, VideoStatus
 
+logger = logging.getLogger("vdstream.streams")
+
 router = APIRouter()
 
-def _validate_session_if_present(session_id: Optional[str], video_id: str):
-    """If session_id is provided, verify it is still valid and active"""
+def _validate_session_if_present(session_id: Optional[str], video_id: str, allow_expired_fallback: bool = False):
+    """
+    If session_id is provided, verify it is still valid and active.
+    If valid, auto-touch session heartbeat.
+    If expired/invalid and allow_expired_fallback is True, gracefully log warning and allow playback.
+    """
     if session_id:
-        if not stream_manager.is_session_valid(session_id, video_id):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Stream session is expired or invalid. Please re-acquire a streaming session."
-            )
+        if stream_manager.is_session_valid(session_id, video_id):
+            stream_manager.touch_session(session_id)
+        else:
+            if allow_expired_fallback and settings.ALLOW_PREVIEW_FALLBACK:
+                logger.warning(
+                    f"Session {session_id} for video {video_id} is expired or invalid. "
+                    "Gracefully falling back to preview stream mode."
+                )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Stream session is expired or invalid. Please re-acquire a streaming session."
+                )
 
 @router.get("/{video_id}/master.m3u8")
 async def get_hls_master_playlist(
@@ -60,6 +75,17 @@ async def get_hls_master_playlist(
     finally:
         db.close()
 
+@router.get("/{video_id}/preview")
+async def stream_preview_mp4(
+    video_id: str,
+    request: Request
+):
+    """
+    Dedicated preview endpoint serving transcoded 720p MP4 with Byte-Range support.
+    No session token required (safe for external embedding and quick previews).
+    """
+    return await stream_mp4_range(video_id=video_id, request=request, session_id=None)
+
 @router.get("/{video_id}/mp4")
 async def stream_mp4_range(
     video_id: str,
@@ -69,8 +95,9 @@ async def stream_mp4_range(
     """
     Serve transcoded 720p MP4 with HTTP 206 Partial Content (Byte-Range support)
     for instant smooth seeking and streaming.
+    Supports auto-heartbeat extension and graceful preview fallback if session is expired.
     """
-    _validate_session_if_present(session_id, video_id)
+    _validate_session_if_present(session_id, video_id, allow_expired_fallback=True)
 
     db = SessionLocal()
     try:
@@ -144,7 +171,9 @@ async def get_hls_segment(
     session_id: Optional[str] = Query(None)
 ):
     """Serve individual HLS video TS segment or sub-playlist"""
-    # Guard against accidental /mp4 or /master.m3u8 matching
+    # Guard against accidental /mp4, /preview or /master.m3u8 matching
+    if segment_name == "preview":
+        return await stream_preview_mp4(video_id=video_id, request=request)
     if segment_name == "mp4":
         return await stream_mp4_range(video_id=video_id, request=request, session_id=session_id)
     if segment_name == "master.m3u8":

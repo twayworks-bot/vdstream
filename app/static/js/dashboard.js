@@ -252,6 +252,10 @@ function closePlayer(hideModal = true) {
 function showVideoDetails(videoId) {
     const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
     const origin = window.location.origin;
+    const previewInput = document.getElementById('modal-preview-url');
+    if (previewInput) {
+        previewInput.value = `${origin}${BASE_PREFIX}/api/v1/streams/${videoId}/preview`;
+    }
     document.getElementById('modal-hls-url').value = `${origin}${BASE_PREFIX}/api/v1/streams/${videoId}/master.m3u8`;
     document.getElementById('modal-mp4-url').value = `${origin}${BASE_PREFIX}/api/v1/streams/${videoId}/mp4`;
     document.getElementById('modal-status-url').value = `${origin}${BASE_PREFIX}/api/v1/videos/${videoId}/status`;

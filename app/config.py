@@ -17,7 +17,8 @@ class Settings(BaseSettings):
     MAX_CONCURRENT_TRANSCODE: int = 3
     MAX_QUEUE_SIZE: int = 20
     MAX_CONCURRENT_STREAMS: int = 5
-    STREAM_SESSION_TIMEOUT_SECONDS: int = 30
+    STREAM_SESSION_TIMEOUT_SECONDS: int = 60
+    ALLOW_PREVIEW_FALLBACK: bool = True
 
     # Video Constraints
     MAX_VIDEOSIZE: str = "100MB"

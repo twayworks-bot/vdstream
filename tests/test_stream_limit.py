@@ -92,3 +92,64 @@ def test_stream_mp4_endpoint_not_treated_as_segment(client, tmp_path):
     assert resp.status_code in [200, 206]
     assert resp.headers.get("content-type") == "video/mp4"
 
+def test_stream_preview_and_fallback(client, tmp_path):
+    p = settings.base_prefix
+    dummy_file = tmp_path / "preview_test.mp4"
+    dummy_file.write_bytes(b"MOCK_PREVIEW_DATA" * 50)
+
+    db = SessionLocal()
+    vid_id = "vid_test_preview_features"
+    v = db.query(Video).filter(Video.id == vid_id).first()
+    if not v:
+        v = Video(
+            id=vid_id,
+            title="Preview Feature Test",
+            original_filename="preview.mp4",
+            stored_upload_path=str(dummy_file),
+            transcoded_path=str(dummy_file),
+            hls_dir_path=str(tmp_path),
+            hls_playlist_path=str(tmp_path / "master.m3u8"),
+            status=VideoStatus.COMPLETED
+        )
+        db.add(v)
+        db.commit()
+    db.close()
+
+    # 1. Test dedicated preview endpoint
+    resp_prev = client.get(f"{p}/api/v1/streams/{vid_id}/preview")
+    assert resp_prev.status_code in [200, 206]
+    assert resp_prev.headers.get("content-type") == "video/mp4"
+
+    # 2. Test streaming info and status include preview_url
+    resp_stream = client.get(f"{p}/api/v1/videos/{vid_id}/stream")
+    assert resp_stream.status_code == 200
+    stream_data = resp_stream.json()["data"]
+    assert "preview_url" in stream_data["streaming_urls"]
+    assert stream_data["session_expires_in_seconds"] == settings.STREAM_SESSION_TIMEOUT_SECONDS
+    session_id = stream_data["session_id"]
+
+    resp_status = client.get(f"{p}/api/v1/videos/{vid_id}/status")
+    assert resp_status.status_code == 200
+    assert "preview_url" in resp_status.json()["data"]
+
+    # 3. Test Auto-Heartbeat on MP4 range request
+    session_obj = stream_manager._sessions.get(session_id)
+    assert session_obj is not None
+    initial_hb = session_obj.last_heartbeat
+
+    # Simulate slight delay and MP4 request
+    import time
+    time.sleep(0.01)
+    resp_mp4 = client.get(f"{p}/api/v1/streams/{vid_id}/mp4?session_id={session_id}")
+    assert resp_mp4.status_code in [200, 206]
+    assert session_obj.last_heartbeat >= initial_hb
+
+    # 4. Test graceful preview fallback when session_id is expired or invalid
+    fake_expired_sess = "sess_expired_nonexistent_9999"
+    resp_expired = client.get(f"{p}/api/v1/streams/{vid_id}/mp4?session_id={fake_expired_sess}")
+    # With ALLOW_PREVIEW_FALLBACK=True, should gracefully serve MP4 instead of 403 error
+    assert resp_expired.status_code in [200, 206]
+
+    # Cleanup
+    stream_manager._sessions.clear()
+

@@ -175,8 +175,9 @@ sequenceDiagram
   "data": {
     "video_id": "vid_20261006_a9b8c7d6",
     "session_id": "sess_89f1a23b-4567",
-    "session_expires_in_seconds": 30,
+    "session_expires_in_seconds": 60,
     "streaming_urls": {
+      "preview_url": "/api/v1/streams/vid_20261006_a9b8c7d6/preview",
       "hls_master_url": "/api/v1/streams/vid_20261006_a9b8c7d6/master.m3u8?session_id=sess_89f1a23b-4567",
       "hls_absolute_url": "http://localhost:5000/api/v1/streams/vid_20261006_a9b8c7d6/master.m3u8?session_id=sess_89f1a23b-4567",
       "mp4_range_url": "/api/v1/streams/vid_20261006_a9b8c7d6/mp4?session_id=sess_89f1a23b-4567"
@@ -186,6 +187,10 @@ sequenceDiagram
   }
 }
 ```
+
+> **참고**:
+> - `preview_url`: 외부 웹 페이지 임베드 및 단순 미리보기 전용 URL입니다. 세션 토큰 만료 없이 직접 720p MP4 재생이 가능합니다.
+> - 스트리밍 데이터 요청(MP4 Range 및 HLS 청크 요청)이 발생할 때마다 세션 수명이 자동으로 연장(Auto-Heartbeat)됩니다.
 
 #### 에러 응답
 - `400 Bad Request`: 비디오가 아직 `COMPLETED` 상태가 아닌 경우.

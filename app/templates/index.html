@@ -344,6 +344,13 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
+                    <label class="form-label text-secondary small">미리보기 전용 URL (세션 무관 / 외부 임베드용)</label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" id="modal-preview-url" class="form-control font-monospace" readonly>
+                        <button class="btn btn-outline-success" onclick="copyToClipboard('modal-preview-url')">복사</button>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label class="form-label text-secondary small">HLS 플레이리스트 (.m3u8)</label>
                     <div class="input-group input-group-sm">
                         <input type="text" id="modal-hls-url" class="form-control font-monospace" readonly>

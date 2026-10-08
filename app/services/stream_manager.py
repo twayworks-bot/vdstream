@@ -103,6 +103,16 @@ class StreamManager:
             return False
         return True
 
+    def touch_session(self, session_id: str) -> bool:
+        """Update last heartbeat timestamp on active streaming request (Auto-Heartbeat)"""
+        session = self._sessions.get(session_id)
+        if not session:
+            return False
+        if session.is_expired(settings.STREAM_SESSION_TIMEOUT_SECONDS):
+            return False
+        session.update_heartbeat()
+        return True
+
     def get_status(self) -> Dict[str, Any]:
         self._purge_expired_sessions_sync()
         active_count = len(self._sessions)
